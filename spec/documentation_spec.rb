@@ -76,7 +76,25 @@ describe "Documentation" do
     s.g = "=FOO(10, 20)"
 
 #   puts s.g              # => 17
-    s.g.between?(10, 20).should be_true
+    s.g.between?(10, 20).should eq(true)
+  end
+
+  it "absolute references work" do
+
+    s.A1 = 12.2
+
+    s.B1 = "=A1"
+    s.B1.should eq(12.2)
+
+    s.B1 = "=$A$1"
+    s.B1.should eq(12.2)
+
+    s.B1 = "=A$1"
+    s.B1.should eq(12.2)
+
+    s.B1 = "=$A1"
+    s.B1.should eq(12.2)
+
   end
 
 end
