@@ -94,16 +94,34 @@ s.cells               # => {:F1=>"= E1 + SUM(D1:D5)", :E1=>"= D1 ^ D2", :D1=>"1"
 Importers
 ---------
 
-Soroban has a built-in importer for xlsx files. It requires the [RubyXL](https://github.com/gilt/rubyXL) gem. Use it as follows:
+Soroban has a built-in importer for xlsx files. It requires the [RubyXL](https://github.com/gilt/rubyXL) gem:
+
+```
+gem install rubyXL
+```
+
+or add the following to your Gemfile:
+  
+```
+# Gemfile
+gem 'rubyXL', '~> 3.4.18' # If you want to use the rubyXL import function
+```
+
+Use it as follows:
 
 ```ruby
-BINDINGS = {
-  :planet => :B1,
-  :mass => :B2,
-  :force => :B3
+require 'rubyXL'
+require 'soroban'
+
+# Define which cells contain data for input/output
+hash = {
+  planet: :B1,
+  mass: :B2,
+  force: :B3
 }
 
-s = Soroban::Import::rubyXL("files/Physics.xlsx", 0, BINDINGS)
+sheet_number = 0
+s = Soroban::Import::rubyXL("files/Physics.xlsx", sheet_number, hash)
 
 s.planet = 'Earth'
 s.mass = 80
@@ -114,7 +132,7 @@ s.mass = 80
 puts s.force          # => 710.044826106394
 ```
 
-The above example parses the first sheet of Physics.xlsx, which you can [download](https://github.com/agworld/soroban/raw/master/files/Physics.xlsx).
+The above example parses the first sheet of Physics.xlsx, which you can [download](https://github.com/coezbek/soroban/raw/master/files/Physics.xlsx).
 
 This import process returns a new Soroban::Sheet object that contains all the
 cells required to calculate the values of the bound variables, and which has the
@@ -166,9 +184,11 @@ Contributing to Soroban
 * Start a feature/bugfix branch.
 * Commit and push until you are happy with your contribution.
 * Make sure to add tests for it. This is important so I don't break it in a future version unintentionally.
-* Please try not to mess with the Rakefile, version, or history. If you want to have your own version, or is otherwise necessary, that is fine, but please isolate to its own commit so I can cherry-pick around it.
 
-Copyright
+Copyright / License
 ---------
 
-Copyright (c) 2014 Agworld Pty. Ltd. See LICENSE.txt for further details.
+Copyright (c) 2021 C. Özbek
+Copyright (c) 2014 Agworld Pty. Ltd. 
+
+Licensed under MIT License / See LICENSE.txt for further details.
