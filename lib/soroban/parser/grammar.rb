@@ -1587,32 +1587,86 @@ module Soroban
 
       i0 = index
       i1, s1 = index, []
-      if has_terminal?(@regexps[gr = '\A[a-zA-Z]'] ||= Regexp.new(gr), :regexp, index)
-        r2 = true
-        @index += 1
+      if (match_len = has_terminal?('$', false, index))
+        r3 = true
+        @index += match_len
       else
-        terminal_parse_failure('[a-zA-Z]')
-        r2 = nil
+        terminal_parse_failure('$')
+        r3 = nil
+      end
+      if r3
+        r2 = r3
+      else
+        r2 = instantiate_node(SyntaxNode,input, index...index)
       end
       s1 << r2
       if r2
-        s3, i3 = [], index
+        s4, i4 = [], index
         loop do
-          if has_terminal?(@regexps[gr = '\A[a-zA-Z0-9]'] ||= Regexp.new(gr), :regexp, index)
-            r4 = true
+          if has_terminal?(@regexps[gr = '\A[A-Za-z]'] ||= Regexp.new(gr), :regexp, index)
+            r5 = true
             @index += 1
           else
-            terminal_parse_failure('[a-zA-Z0-9]')
-            r4 = nil
+            terminal_parse_failure('[A-Za-z]')
+            r5 = nil
           end
-          if r4
-            s3 << r4
+          if r5
+            s4 << r5
           else
             break
           end
         end
-        r3 = instantiate_node(SyntaxNode,input, i3...index, s3)
-        s1 << r3
+        if s4.empty?
+          @index = i4
+          r4 = nil
+        else
+          r4 = instantiate_node(SyntaxNode,input, i4...index, s4)
+        end
+        s1 << r4
+        if r4
+          if (match_len = has_terminal?('$', false, index))
+            r7 = true
+            @index += match_len
+          else
+            terminal_parse_failure('$')
+            r7 = nil
+          end
+          if r7
+            r6 = r7
+          else
+            r6 = instantiate_node(SyntaxNode,input, index...index)
+          end
+          s1 << r6
+          if r6
+            if has_terminal?(@regexps[gr = '\A[1-9]'] ||= Regexp.new(gr), :regexp, index)
+              r8 = true
+              @index += 1
+            else
+              terminal_parse_failure('[1-9]')
+              r8 = nil
+            end
+            s1 << r8
+            if r8
+              s9, i9 = [], index
+              loop do
+                if has_terminal?(@regexps[gr = '\A[0-9]'] ||= Regexp.new(gr), :regexp, index)
+                  r10 = true
+                  @index += 1
+                else
+                  terminal_parse_failure('[0-9]')
+                  r10 = nil
+                end
+                if r10
+                  s9 << r10
+                else
+                  break
+                end
+              end
+              r9 = instantiate_node(SyntaxNode,input, i9...index, s9)
+              s1 << r9
+            end
+          end
+        end
       end
       if s1.last
         r1 = instantiate_node(Identifier,input, i1...index, s1)
@@ -1625,88 +1679,44 @@ module Soroban
         r1 = SyntaxNode.new(input, (index-1)...index) if r1 == true
         r0 = r1
       else
-        i5, s5 = index, []
-        if (match_len = has_terminal?('$', false, index))
-          r6 = true
-          @index += match_len
+        i11, s11 = index, []
+        if has_terminal?(@regexps[gr = '\A[a-zA-Z]'] ||= Regexp.new(gr), :regexp, index)
+          r12 = true
+          @index += 1
         else
-          terminal_parse_failure('$')
-          r6 = nil
+          terminal_parse_failure('[a-zA-Z]')
+          r12 = nil
         end
-        s5 << r6
-        if r6
-          s7, i7 = [], index
+        s11 << r12
+        if r12
+          s13, i13 = [], index
           loop do
-            if has_terminal?(@regexps[gr = '\A[A-Za-z]'] ||= Regexp.new(gr), :regexp, index)
-              r8 = true
+            if has_terminal?(@regexps[gr = '\A[a-zA-Z0-9]'] ||= Regexp.new(gr), :regexp, index)
+              r14 = true
               @index += 1
             else
-              terminal_parse_failure('[A-Za-z]')
-              r8 = nil
+              terminal_parse_failure('[a-zA-Z0-9]')
+              r14 = nil
             end
-            if r8
-              s7 << r8
+            if r14
+              s13 << r14
             else
               break
             end
           end
-          if s7.empty?
-            @index = i7
-            r7 = nil
-          else
-            r7 = instantiate_node(SyntaxNode,input, i7...index, s7)
-          end
-          s5 << r7
-          if r7
-            if (match_len = has_terminal?('$', false, index))
-              r9 = true
-              @index += match_len
-            else
-              terminal_parse_failure('$')
-              r9 = nil
-            end
-            s5 << r9
-            if r9
-              if has_terminal?(@regexps[gr = '\A[1-9]'] ||= Regexp.new(gr), :regexp, index)
-                r10 = true
-                @index += 1
-              else
-                terminal_parse_failure('[1-9]')
-                r10 = nil
-              end
-              s5 << r10
-              if r10
-                s11, i11 = [], index
-                loop do
-                  if has_terminal?(@regexps[gr = '\A[0-9]'] ||= Regexp.new(gr), :regexp, index)
-                    r12 = true
-                    @index += 1
-                  else
-                    terminal_parse_failure('[0-9]')
-                    r12 = nil
-                  end
-                  if r12
-                    s11 << r12
-                  else
-                    break
-                  end
-                end
-                r11 = instantiate_node(SyntaxNode,input, i11...index, s11)
-                s5 << r11
-              end
-            end
-          end
+          r13 = instantiate_node(SyntaxNode,input, i13...index, s13)
+          s11 << r13
         end
-        if s5.last
-          r5 = instantiate_node(Identifier,input, i5...index, s5)
-          r5.extend(Identifier1)
+        if s11.last
+          r11 = instantiate_node(Identifier,input, i11...index, s11)
+          r11.extend(Identifier1)
         else
-          @index = i5
-          r5 = nil
+          @index = i11
+          r11 = nil
         end
-        if r5
-          r5 = SyntaxNode.new(input, (index-1)...index) if r5 == true
-          r0 = r5
+        if r11
+          r11 = SyntaxNode.new(input, (index-1)...index) if r11 == true
+          r0 = r11
         else
           @index = i0
           r0 = nil
@@ -1721,9 +1731,6 @@ module Soroban
     module Label0
     end
 
-    module Label1
-    end
-
     def _nt_label
       start_index = index
       if node_cache[:label].has_key?(index)
@@ -1735,156 +1742,94 @@ module Soroban
         return cached
       end
 
-      i0 = index
-      i1, s1 = index, []
-      s2, i2 = [], index
-      loop do
-        if has_terminal?(@regexps[gr = '\A[A-Za-z]'] ||= Regexp.new(gr), :regexp, index)
-          r3 = true
-          @index += 1
-        else
-          terminal_parse_failure('[A-Za-z]')
-          r3 = nil
-        end
-        if r3
-          s2 << r3
-        else
-          break
-        end
-      end
-      if s2.empty?
-        @index = i2
+      i0, s0 = index, []
+      if (match_len = has_terminal?('$', false, index))
+        r2 = true
+        @index += match_len
+      else
+        terminal_parse_failure('$')
         r2 = nil
-      else
-        r2 = instantiate_node(SyntaxNode,input, i2...index, s2)
       end
-      s1 << r2
       if r2
-        if has_terminal?(@regexps[gr = '\A[1-9]'] ||= Regexp.new(gr), :regexp, index)
-          r4 = true
-          @index += 1
-        else
-          terminal_parse_failure('[1-9]')
-          r4 = nil
-        end
-        s1 << r4
-        if r4
-          s5, i5 = [], index
-          loop do
-            if has_terminal?(@regexps[gr = '\A[0-9]'] ||= Regexp.new(gr), :regexp, index)
-              r6 = true
-              @index += 1
-            else
-              terminal_parse_failure('[0-9]')
-              r6 = nil
-            end
-            if r6
-              s5 << r6
-            else
-              break
-            end
-          end
-          r5 = instantiate_node(SyntaxNode,input, i5...index, s5)
-          s1 << r5
-        end
-      end
-      if s1.last
-        r1 = instantiate_node(Label,input, i1...index, s1)
-        r1.extend(Label0)
+        r1 = r2
       else
-        @index = i1
-        r1 = nil
+        r1 = instantiate_node(SyntaxNode,input, index...index)
       end
+      s0 << r1
       if r1
-        r1 = SyntaxNode.new(input, (index-1)...index) if r1 == true
-        r0 = r1
-      else
-        i7, s7 = index, []
-        if (match_len = has_terminal?('$', false, index))
-          r8 = true
-          @index += match_len
-        else
-          terminal_parse_failure('$')
-          r8 = nil
+        s3, i3 = [], index
+        loop do
+          if has_terminal?(@regexps[gr = '\A[A-Za-z]'] ||= Regexp.new(gr), :regexp, index)
+            r4 = true
+            @index += 1
+          else
+            terminal_parse_failure('[A-Za-z]')
+            r4 = nil
+          end
+          if r4
+            s3 << r4
+          else
+            break
+          end
         end
-        s7 << r8
-        if r8
-          s9, i9 = [], index
-          loop do
-            if has_terminal?(@regexps[gr = '\A[A-Za-z]'] ||= Regexp.new(gr), :regexp, index)
-              r10 = true
+        if s3.empty?
+          @index = i3
+          r3 = nil
+        else
+          r3 = instantiate_node(SyntaxNode,input, i3...index, s3)
+        end
+        s0 << r3
+        if r3
+          if (match_len = has_terminal?('$', false, index))
+            r6 = true
+            @index += match_len
+          else
+            terminal_parse_failure('$')
+            r6 = nil
+          end
+          if r6
+            r5 = r6
+          else
+            r5 = instantiate_node(SyntaxNode,input, index...index)
+          end
+          s0 << r5
+          if r5
+            if has_terminal?(@regexps[gr = '\A[1-9]'] ||= Regexp.new(gr), :regexp, index)
+              r7 = true
               @index += 1
             else
-              terminal_parse_failure('[A-Za-z]')
-              r10 = nil
+              terminal_parse_failure('[1-9]')
+              r7 = nil
             end
-            if r10
-              s9 << r10
-            else
-              break
-            end
-          end
-          if s9.empty?
-            @index = i9
-            r9 = nil
-          else
-            r9 = instantiate_node(SyntaxNode,input, i9...index, s9)
-          end
-          s7 << r9
-          if r9
-            if (match_len = has_terminal?('$', false, index))
-              r11 = true
-              @index += match_len
-            else
-              terminal_parse_failure('$')
-              r11 = nil
-            end
-            s7 << r11
-            if r11
-              if has_terminal?(@regexps[gr = '\A[1-9]'] ||= Regexp.new(gr), :regexp, index)
-                r12 = true
-                @index += 1
-              else
-                terminal_parse_failure('[1-9]')
-                r12 = nil
-              end
-              s7 << r12
-              if r12
-                s13, i13 = [], index
-                loop do
-                  if has_terminal?(@regexps[gr = '\A[0-9]'] ||= Regexp.new(gr), :regexp, index)
-                    r14 = true
-                    @index += 1
-                  else
-                    terminal_parse_failure('[0-9]')
-                    r14 = nil
-                  end
-                  if r14
-                    s13 << r14
-                  else
-                    break
-                  end
+            s0 << r7
+            if r7
+              s8, i8 = [], index
+              loop do
+                if has_terminal?(@regexps[gr = '\A[0-9]'] ||= Regexp.new(gr), :regexp, index)
+                  r9 = true
+                  @index += 1
+                else
+                  terminal_parse_failure('[0-9]')
+                  r9 = nil
                 end
-                r13 = instantiate_node(SyntaxNode,input, i13...index, s13)
-                s7 << r13
+                if r9
+                  s8 << r9
+                else
+                  break
+                end
               end
+              r8 = instantiate_node(SyntaxNode,input, i8...index, s8)
+              s0 << r8
             end
           end
         end
-        if s7.last
-          r7 = instantiate_node(Label,input, i7...index, s7)
-          r7.extend(Label1)
-        else
-          @index = i7
-          r7 = nil
-        end
-        if r7
-          r7 = SyntaxNode.new(input, (index-1)...index) if r7 == true
-          r0 = r7
-        else
-          @index = i0
-          r0 = nil
-        end
+      end
+      if s0.last
+        r0 = instantiate_node(Label,input, i0...index, s0)
+        r0.extend(Label0)
+      else
+        @index = i0
+        r0 = nil
       end
 
       node_cache[:label][start_index] = r0
