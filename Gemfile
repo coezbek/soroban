@@ -3,14 +3,12 @@ source 'http://rubygems.org'
 gem 'treetop', '~> 1.5.3'
 
 group :development do
-  gem 'rubyXL', '~> 1.2.10'
-  gem 'nokogiri', '~> 1.5.11'
-  gem 'rubyzip', '~> 0.9.9'
+  gem 'rubyXL', '~> 3.4.18'
 end
 
 group :test do
   gem 'rake'
-  gem 'rspec', '~> 2.14.1'
+  gem 'rspec', '~> 3.1'
   gem 'yard', '~> 0.7'
 end
 
@@ -20,6 +18,6 @@ group :document do
 end
 
 group :gemify do
-  gem 'jeweler', '~> 2.0.1'
+  gem 'jeweler', '~> 2'
   gem 'git', '~> 1.2.5'
 end

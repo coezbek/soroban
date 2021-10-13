@@ -48,7 +48,7 @@ module Soroban
       def _addCell(label)
         row, col = Soroban::Helpers::getPos(label)
         cell = @_sheet[row][col]
-        data = cell.formula rescue nil
+        data = cell.formula.expression rescue nil
         data = "=#{data}" unless data.nil?
         data ||= cell.value.to_s rescue nil
         @_model.set(label.to_sym => data)
