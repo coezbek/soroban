@@ -1,12 +1,24 @@
-[![Gem Version](https://badge.fury.io/rb/soroban.svg)](http://badge.fury.io/rb/soroban)
-[![Dependency Status](https://gemnasium.com/agworld/soroban.png)](https://gemnasium.com/agworld/soroban)
-[![Build Status](https://secure.travis-ci.org/agworld/soroban.png)](http://travis-ci.org/#!/agworld/soroban)
-[![Code Climate](https://codeclimate.com/github/agworld/soroban.png)](https://codeclimate.com/github/agworld/soroban)
-
 Soroban
 =======
 
 Soroban is a calculating engine that understands Excel formulas.
+
+About this Fork
+--------------
+
+https://github.com/coezbek/soroban/ was forked from agworld/soroban, because the original repo was switched to read-only and soroban crashed for me when using absolute references containing absolute references such as `A$1`. I also updated `rubyXL` to a recent 3.4.
+
+How to use this gem instead of agworld/soroban
+----------------------------------------------
+
+In your Gemfile add:
+
+```ruby
+# Gemfile
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
+gem 'soroban', github: "coezbek/soroban"
+gem 'rubyXL', '~> 3.4.18' # If you want to use the rubyXL import function
+```
 
 Getting Started
 ---------------
